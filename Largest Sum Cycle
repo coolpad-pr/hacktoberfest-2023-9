@@ -1,0 +1,58 @@
+Given a maze with N cells. Each cell may have multiple entry points but not more than one exit(i.e entry/exit points are unidirectional doors like valves).
+You are given an array Edge[] of N integers, where Edge[i] contains the cell number that can be reached from of cell i in one step. Edge[i] is -1 if the ith cell doesn't have an exit. 
+The task is to find the largest sum of a cycle in the maze(Sum of a cycle is the sum of the cell indexes of all cells present in that cycle).
+
+Note:The cells are named with an integer value from 0 to N-1. If there is no cycle in the graph then return -1.
+
+Example 1:
+
+Input:
+N = 4
+Edge[] = {1, 2, 0, -1}
+Output: 3
+Explanation: 
+There is only one cycle in the graph.
+(i.e 0->1->2->0)
+Sum of the cell index in that cycle 
+= 0 + 1 + 2 = 3.
+Example 2:
+
+Input:
+N = 4 
+Edge[] = {2, 0, -1, 2}
+Output: -1
+Explanation:
+1 -> 0 -> 2 <- 3
+There is no cycle in the graph.
+
+
+
+def largestSumOfCycle(N, Edge):
+    def dfs(node, visited, start):
+        if visited[node] == 1:
+            return start - node
+        if visited[node] == 2:
+            return 0
+        visited[node] = 1
+        return dfs(Edge[node], visited, start + node)
+    
+    max_sum = -1
+    for i in range(N):
+        visited = [0] * N
+        if visited[i] == 0 and Edge[i] != -1:
+            cycle_sum = dfs(i, visited, i)
+            if cycle_sum > 0:
+                max_sum = max(max_sum, cycle_sum)
+    
+    return max_sum if max_sum > 0 else -1
+
+# Example usage:
+N1 = 4
+Edge1 = [1, 2, 0, -1]
+result1 = largestSumOfCycle(N1, Edge1)
+print(result1)  # Output: 3
+
+N2 = 4
+Edge2 = [2, 0, -1, 2]
+result2 = largestSumOfCycle(N2, Edge2)
+print(result2)  # Output: -1
